@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Checks the custom NPCs the app's server turns on (npc/scripts_custom.conf): Job Master, Healer, Warper, Reset
-# Girl and Stylist.
+# Girl, Stylist and Cash Shop.
 #   1. each is listed, stands in Prontera at least 2 cells from every other NPC the server loads
 #   2. the map-server loads them without a script error or warning (out/logs/map.log of the last server start)
 #   3. played on the desktop client (scripts/run-nostalre-script.sh), character JobTester on the test account:
@@ -23,7 +23,7 @@ r=0
 python3 -I - "$RATHENA" <<'EOF' || r=$?
 import os, re, sys
 root = sys.argv[1]
-want = {"jobmaster", "healer", "warper", "resetnpc", "stylist"}
+want = {"jobmaster", "healer", "warper", "resetnpc", "stylist", "cashshop"}
 
 def loaded(conf, seen):
 	"""npc files the server loads from conf (following import: lines)"""
@@ -69,7 +69,7 @@ check "custom NPCs listed and spaced" $r
 # 2. loaded cleanly: the last server start's map log
 log="$OUT/logs/map.log"
 if [ -f "$log" ]; then
-	errors=$(grep -aiE 'error|warning' "$log" | grep -aE 'npc/custom/(jobmaster|healer|warper|resetnpc|stylist)' || true)
+	errors=$(grep -aiE 'error|warning' "$log" | grep -aE 'npc/custom/(jobmaster|healer|warper|resetnpc|stylist|cashshop)' || true)
 	[ -z "$errors" ] && r=0 || { echo "$errors"; r=1; }
 	check "map-server loads them without errors" $r
 else
