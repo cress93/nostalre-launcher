@@ -59,6 +59,8 @@ class SettingsScreen(
 				ServerConf.World.MAX_STEPS, ServerConf.World().maxShells, { "$it" }, { world.maxShells } ) { world = world.copy( maxShells = it ) } )
 			addView( stepRow( "AI players per map", "How many AI players a map gets: half its usual crowd, the usual, or double.",
 				ServerConf.World.DENSITY_STEPS, ServerConf.World().density, { busyName( it ) }, { world.density } ) { world = world.copy( density = it ) } )
+			addView( stepRow( "AI player respawn", "How long an AI player who falls stays down before getting up again.",
+				ServerConf.World.AI_RESPAWN_STEPS, ServerConf.World().aiRespawn, { waitName( it ) }, { world.aiRespawn } ) { world = world.copy( aiRespawn = it ) } )
 			addView( stepRow( "Monsters", "How many monsters each map has, against the official count.",
 				ServerConf.World.MONSTER_STEPS, ServerConf.World().monsters, { "$it%" }, { world.monsters } ) { world = world.copy( monsters = it ) } )
 			addView( stepRow( "Respawn speed", "How fast killed monsters come back, times the official speed. Not MVPs or plants.",
@@ -189,6 +191,8 @@ class SettingsScreen(
 		200 -> "High"
 		else -> "Medium"
 	}
+
+	private fun waitName( seconds: Int ) = if( seconds < 60 ) "$seconds s" else "${seconds / 60} min"
 
 	private fun rateRow( label: String, about: String, get: () -> Int, set: ( Int ) -> Unit ) =
 		stepRow( label, about, ServerConf.Rates.STEPS, 1, { "${it}x" }, get, set )

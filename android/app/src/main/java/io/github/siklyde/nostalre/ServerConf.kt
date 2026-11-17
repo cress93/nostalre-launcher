@@ -83,8 +83,8 @@ object ServerConf {
 
 	/**
 	 * The world the servers run, picked in the hub's settings: AI players (the Population Engine's shells) on or off,
-	 * how many at most, how busy a map gets (percent of its spawn table: low, medium, high), and the monsters: how many
-	 * per map (percent) and how fast they come back ([respawn] times).
+	 * how many at most, how busy a map gets (percent of its spawn table: low, medium, high), how long a fallen one stays
+	 * down ([aiRespawn] seconds), and the monsters: how many per map (percent) and how fast they come back ([respawn] times).
 	 */
 	data class World(
 		val ai: Boolean = true,
@@ -92,9 +92,11 @@ object ServerConf {
 		val density: Int = 100,
 		val monsters: Int = 100,
 		val respawn: Int = 1,
+		val aiRespawn: Int = 5,
 	) {
 		fun toMap(): Map<String, Any> = mapOf(
 			"ai" to ai, "max_shells" to maxShells, "density" to density, "monsters" to monsters, "respawn" to respawn,
+			"ai_respawn" to aiRespawn,
 		)
 
 		companion object {
@@ -103,6 +105,8 @@ object ServerConf {
 			val DENSITY_STEPS = listOf( 50, 100, 200 )
 			val MONSTER_STEPS = listOf( 50, 100, 150, 200, 300 )
 			val RESPAWN_STEPS = listOf( 1, 2, 3, 5, 10 )
+			/** Seconds a fallen AI player stays down */
+			val AI_RESPAWN_STEPS = listOf( 5, 30, 60, 120 )
 
 			/** Read back from [toMap]'s keys (the saved picks); a missing or unknown one is the default. */
 			fun from( saved: Map<String, *> ): World {
@@ -114,6 +118,7 @@ object ServerConf {
 					pick( "density", DENSITY_STEPS, default.density ),
 					pick( "monsters", MONSTER_STEPS, default.monsters ),
 					pick( "respawn", RESPAWN_STEPS, default.respawn ),
+					pick( "ai_respawn", AI_RESPAWN_STEPS, default.aiRespawn ),
 				)
 			}
 		}
@@ -134,6 +139,7 @@ object ServerConf {
 		line( "population_engine_enable", if( world.ai ) 1 else 0 )
 		line( "population_engine_max_count", world.maxShells )
 		line( "population_engine_density_pct", world.density )
+		line( "population_engine_respawn_ms", world.aiRespawn * 1000 )
 		line( "mob_count_rate", world.monsters )
 		// a respawn delay in percent: 2x as fast is half the delay
 		line( "mob_spawn_delay", 100 / world.respawn )

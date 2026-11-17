@@ -21,7 +21,7 @@ class ServerConfTest {
 	private val cardKeys = listOf( "item_rate_card", "item_rate_card_boss", "item_rate_card_mvp" )
 	private val worldKeys = listOf(
 		"population_engine_enable", "population_engine_max_count", "population_engine_density_pct",
-		"mob_count_rate", "mob_spawn_delay",
+		"population_engine_respawn_ms", "mob_count_rate", "mob_spawn_delay",
 	)
 
 	private fun world( world: ServerConf.World ) = parse( ServerConf.battleFile( ServerConf.Rates(), world ) )
@@ -31,16 +31,18 @@ class ServerConfTest {
 		assertEquals( "1", conf["population_engine_enable"] )
 		assertEquals( "200", conf["population_engine_max_count"] )
 		assertEquals( "100", conf["population_engine_density_pct"] )
+		assertEquals( "5000", conf["population_engine_respawn_ms"] )
 		assertEquals( "100", conf["mob_count_rate"] )
 		assertEquals( "100", conf["mob_spawn_delay"] )
 		assertEquals( "100", conf["base_exp_rate"] )
 	}
 
 	@Test fun eachWorldPickGoesToItsOwnKey() {
-		val conf = world( ServerConf.World( ai = false, maxShells = 500, density = 50, monsters = 300, respawn = 10 ) )
+		val conf = world( ServerConf.World( ai = false, maxShells = 500, density = 50, monsters = 300, respawn = 10, aiRespawn = 120 ) )
 		assertEquals( "0", conf["population_engine_enable"] )
 		assertEquals( "500", conf["population_engine_max_count"] )
 		assertEquals( "50", conf["population_engine_density_pct"] )
+		assertEquals( "120000", conf["population_engine_respawn_ms"] )
 		assertEquals( "300", conf["mob_count_rate"] )
 		assertEquals( "10", conf["mob_spawn_delay"] )
 	}
@@ -53,6 +55,7 @@ class ServerConfTest {
 	@Test fun worldStepsAsPlanned() {
 		assertEquals( listOf( 50, 100, 200, 300, 500 ), ServerConf.World.MAX_STEPS )
 		assertEquals( listOf( 50, 100, 200 ), ServerConf.World.DENSITY_STEPS )
+		assertEquals( listOf( 5, 30, 60, 120 ), ServerConf.World.AI_RESPAWN_STEPS )
 		assertEquals( listOf( 50, 100, 150, 200, 300 ), ServerConf.World.MONSTER_STEPS )
 		assertEquals( listOf( 1, 2, 3, 5, 10 ), ServerConf.World.RESPAWN_STEPS )
 	}
@@ -63,15 +66,16 @@ class ServerConfTest {
 		assertTrue( ServerConf.World.DENSITY_STEPS.all { it in 10..300 } )
 		assertTrue( ServerConf.World.MONSTER_STEPS.all { it >= 0 } )
 		assertTrue( ServerConf.World.RESPAWN_STEPS.all { 100 / it >= 0 } )
+		assertTrue( ServerConf.World.AI_RESPAWN_STEPS.all { it * 1000 in 1000..600000 } )
 	}
 
 	@Test fun savedWorldReadsBack() {
-		val world = ServerConf.World( ai = false, maxShells = 50, density = 200, monsters = 150, respawn = 5 )
+		val world = ServerConf.World( ai = false, maxShells = 50, density = 200, monsters = 150, respawn = 5, aiRespawn = 60 )
 		assertEquals( world, ServerConf.World.from( world.toMap() ) )
 	}
 
 	@Test fun aWorldPickOffTheStepsReadsAsDefault() {
-		val saved = mapOf( "max_shells" to 7, "density" to 999, "monsters" to "x", "respawn" to 4 )
+		val saved = mapOf( "max_shells" to 7, "density" to 999, "monsters" to "x", "respawn" to 4, "ai_respawn" to 7 )
 		assertEquals( ServerConf.World(), ServerConf.World.from( saved ) )
 	}
 
