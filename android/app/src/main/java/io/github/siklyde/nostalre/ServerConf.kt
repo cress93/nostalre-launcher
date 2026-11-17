@@ -83,8 +83,8 @@ object ServerConf {
 
 	/**
 	 * The world the servers run, picked in the hub's settings: AI players (the Population Engine's shells) on or off,
-	 * how many at most, how busy a map gets (percent of its spawn table), and the monsters: how many per map (percent)
-	 * and how fast they come back ([respawn] times).
+	 * how many at most, how busy a map gets (percent of its spawn table: low, medium, high), and the monsters: how many
+	 * per map (percent) and how fast they come back ([respawn] times).
 	 */
 	data class World(
 		val ai: Boolean = true,
@@ -99,7 +99,8 @@ object ServerConf {
 
 		companion object {
 			val MAX_STEPS = listOf( 50, 100, 200, 300, 500 )
-			val DENSITY_STEPS = listOf( 50, 100, 150, 200, 300 )
+			/** Low, medium, high: half the spawn table's crowd, its own, double */
+			val DENSITY_STEPS = listOf( 50, 100, 200 )
 			val MONSTER_STEPS = listOf( 50, 100, 150, 200, 300 )
 			val RESPAWN_STEPS = listOf( 1, 2, 3, 5, 10 )
 

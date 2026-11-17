@@ -52,7 +52,7 @@ class ServerConfTest {
 
 	@Test fun worldStepsAsPlanned() {
 		assertEquals( listOf( 50, 100, 200, 300, 500 ), ServerConf.World.MAX_STEPS )
-		assertEquals( listOf( 50, 100, 150, 200, 300 ), ServerConf.World.DENSITY_STEPS )
+		assertEquals( listOf( 50, 100, 200 ), ServerConf.World.DENSITY_STEPS )
 		assertEquals( listOf( 50, 100, 150, 200, 300 ), ServerConf.World.MONSTER_STEPS )
 		assertEquals( listOf( 1, 2, 3, 5, 10 ), ServerConf.World.RESPAWN_STEPS )
 	}
@@ -66,7 +66,7 @@ class ServerConfTest {
 	}
 
 	@Test fun savedWorldReadsBack() {
-		val world = ServerConf.World( ai = false, maxShells = 50, density = 300, monsters = 150, respawn = 5 )
+		val world = ServerConf.World( ai = false, maxShells = 50, density = 200, monsters = 150, respawn = 5 )
 		assertEquals( world, ServerConf.World.from( world.toMap() ) )
 	}
 
