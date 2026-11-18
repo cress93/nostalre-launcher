@@ -57,7 +57,7 @@ class SettingsScreen(
 				{ world.ai } ) { world = world.copy( ai = it ) } )
 			addView( stepRow( "Max AI players", "The most AI players at once, in the whole world. Fewer is lighter on the phone.",
 				ServerConf.World.MAX_STEPS, ServerConf.World().maxShells, { "$it" }, { world.maxShells } ) { world = world.copy( maxShells = it ) } )
-			addView( stepRow( "AI players per map", "How many AI players a map gets: half its usual crowd, the usual, or double.",
+			addView( stepRow( "AI players per map", "How many AI players a map gets: a few, half its usual crowd, the usual, or double.",
 				ServerConf.World.DENSITY_STEPS, ServerConf.World().density, { busyName( it ) }, { world.density } ) { world = world.copy( density = it ) } )
 			addView( stepRow( "AI player respawn", "How long an AI player who falls stays down before getting up again.",
 				ServerConf.World.AI_RESPAWN_STEPS, ServerConf.World().aiRespawn, { waitName( it ) }, { world.aiRespawn } ) { world = world.copy( aiRespawn = it ) } )
@@ -187,6 +187,7 @@ class SettingsScreen(
 
 	/** A rate: its name, then ‹ the multiple › (the steps of [ServerConf.Rates.STEPS]). */
 	private fun busyName( density: Int ) = when( density ) {
+		10 -> "Very low"
 		50 -> "Low"
 		200 -> "High"
 		else -> "Medium"

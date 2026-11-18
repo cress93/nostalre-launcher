@@ -54,7 +54,7 @@ class ServerConfTest {
 
 	@Test fun worldStepsAsPlanned() {
 		assertEquals( listOf( 50, 100, 200, 300, 500 ), ServerConf.World.MAX_STEPS )
-		assertEquals( listOf( 50, 100, 200 ), ServerConf.World.DENSITY_STEPS )
+		assertEquals( listOf( 10, 50, 100, 200 ), ServerConf.World.DENSITY_STEPS )
 		assertEquals( listOf( 5, 30, 60, 120 ), ServerConf.World.AI_RESPAWN_STEPS )
 		assertEquals( listOf( 50, 100, 150, 200, 300 ), ServerConf.World.MONSTER_STEPS )
 		assertEquals( listOf( 1, 2, 3, 5, 10 ), ServerConf.World.RESPAWN_STEPS )

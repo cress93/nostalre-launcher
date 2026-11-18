@@ -101,8 +101,8 @@ object ServerConf {
 
 		companion object {
 			val MAX_STEPS = listOf( 50, 100, 200, 300, 500 )
-			/** Low, medium, high: half the spawn table's crowd, its own, double */
-			val DENSITY_STEPS = listOf( 50, 100, 200 )
+			/** Very low, low, medium, high: a tenth of the spawn table's crowd (a few a map), half, its own, double */
+			val DENSITY_STEPS = listOf( 10, 50, 100, 200 )
 			val MONSTER_STEPS = listOf( 50, 100, 150, 200, 300 )
 			val RESPAWN_STEPS = listOf( 1, 2, 3, 5, 10 )
 			/** Seconds a fallen AI player stays down */
