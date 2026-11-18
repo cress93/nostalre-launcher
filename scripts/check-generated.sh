@@ -27,5 +27,6 @@ check item-tables.py lib/game/src/item_tables.rs
 check job-tables.py lib/game/src/job_tables.rs
 check skill-tree.py lib/game/src/skill_tree_tables.rs
 check map-monsters.py lib/game/src/map_monster_tables.rs
+check nav-links.py lib/game/src/nav_link_tables.rs
 check job-names.py android/app/src/main/java/io/github/siklyde/nostalre/JobNames.kt .
 exit $stale
