@@ -29,4 +29,13 @@ check skill-tree.py lib/game/src/skill_tree_tables.rs
 check map-monsters.py lib/game/src/map_monster_tables.rs
 check nav-links.py lib/game/src/nav_link_tables.rs
 check job-names.py android/app/src/main/java/io/github/siklyde/nostalre/JobNames.kt .
+# the Card Album's tables, the client's and the server's
+python3 "$ROOT/scripts/gen-card-album.py" "$RATHENA" "$TMP/card_album_tables.rs" "$TMP/cardalbum_table.txt" >/dev/null \
+	|| { echo "failed: scripts/gen-card-album.py" >&2; stale=1; }
+for pair in "card_album_tables.rs:client/lib/game/src/card_album_tables.rs" "cardalbum_table.txt:server/npc/custom/cardalbum_table.txt"; do
+	if ! cmp -s "$TMP/${pair%%:*}" "$ROOT/${pair#*:}"; then
+		echo "stale: $ROOT/${pair#*:} differs from scripts/gen-card-album.py's output; rerun it, don't edit the file" >&2
+		stale=1
+	fi
+done
 exit $stale
