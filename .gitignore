@@ -2,3 +2,8 @@
 /game-data/*
 !/game-data/README.md
 __pycache__/
+# local notes, logs and personal setup
+/CLAUDE.md
+/build.log
+/private notes
+/english/Cargo.lock
